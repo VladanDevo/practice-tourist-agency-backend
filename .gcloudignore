@@ -1,0 +1,11 @@
+# Default ignores
+.git
+.gitignore
+.idea
+.vscode
+
+# Ignore everything INSIDE the target directory...
+target/*
+
+# ...EXCEPT for the final .jar file!
+!target/*.jar
