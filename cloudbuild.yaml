@@ -1,0 +1,39 @@
+steps:
+# 1. Build the application's JAR file using the Maven builder
+- name: 'maven:3.8-openjdk-17'
+  entrypoint: 'mvn'
+  args: ['clean', 'package', '-DskipTests']
+
+# 2. Build the Docker container image
+# The image is tagged with the unique commit SHA for versioning
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '-t'
+  - 'europe-west3-docker.pkg.dev/$PROJECT_ID/vladan-backend-repo/vladan-tourist-agency-backend:$COMMIT_SHA'
+  - '.'
+
+# 3. Push the image to Artifact Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'europe-west3-docker.pkg.dev/$PROJECT_ID/vladan-backend-repo/vladan-tourist-agency-backend:$COMMIT_SHA'
+
+# 4. Deploy the new image to Cloud Run
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'gcloud'
+  args:
+  - 'run'
+  - 'deploy'
+  - 'vladan-tourist-agency-backend'
+  - '--image=europe-west3-docker.pkg.dev/$PROJECT_ID/vladan-backend-repo/vladan-tourist-agency-backend:$COMMIT_SHA'
+  - '--region=europe-west3'
+  - '--platform=managed'
+  - '--add-cloudsql-instances=sara-sandbox-interns:europe-west3:vladan-database'
+  - '--set-secrets=DB_PASS=vladan-tourist-agency-db-password:latest'
+  - '--set-env-vars=SPRING_PROFILES_ACTIVE=gcp'
+  - '--allow-unauthenticated'
+
+# This specifies which images are created by this build
+images:
+- 'europe-west3-docker.pkg.dev/$PROJECT_ID/vladan-backend-repo/vladan-tourist-agency-backend:$COMMIT_SHA'
