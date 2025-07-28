@@ -37,3 +37,6 @@ steps:
 # This specifies which images are created by this build
 images:
 - 'europe-west3-docker.pkg.dev/$PROJECT_ID/vladan-backend-repo/vladan-tourist-agency-backend:$COMMIT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
