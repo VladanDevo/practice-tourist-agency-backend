@@ -24,6 +24,8 @@ import rva.service.HotelService;
 @CrossOrigin
 public class AranzmanController {
 	
+	//Testing the pipeline with the comment
+
 	@Autowired
 	private AranzmanService service;
 	
