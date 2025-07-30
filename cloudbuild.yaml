@@ -29,10 +29,6 @@ steps:
   - '--image=europe-west3-docker.pkg.dev/$PROJECT_ID/vladan-backend-repo/vladan-tourist-agency-backend:$COMMIT_SHA'
   - '--region=europe-west3'
   - '--platform=managed'
-  - '--add-cloudsql-instances=sara-sandbox-interns:europe-west3:vladan-database'
-  - '--set-secrets=DB_PASS=vladan-tourist-agency-db-password:latest'
-  - '--set-env-vars=SPRING_PROFILES_ACTIVE=gcp'
-  - '--allow-unauthenticated'
 
 # This specifies which images are created by this build
 images:
